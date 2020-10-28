@@ -2,19 +2,33 @@ package cegepst;
 
 import cegepst.engine.Buffer;
 import cegepst.engine.Game;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class MovingRectangleGame extends Game {
 
-    private Player player;
-    private GameController controller;
+    private Player playerOne;
+    private Player playerTwo;
+    private GameController controllerOne;
+    private GameController controllerTwo;
     private ArrayList<Footprint> footprints;
 
     public MovingRectangleGame() {
-        controller = new GameController();
-        player = new Player(controller);
+        controllerOne = new GameController();
+        controllerTwo = new GameController();
+        controllerTwo.setDownKey(KeyEvent.VK_S);
+        controllerTwo.setUpKey(KeyEvent.VK_W);
+        controllerTwo.setLeftKey(KeyEvent.VK_A);
+        controllerTwo.setRightKey(KeyEvent.VK_D);
+
+        playerOne = new Player(controllerOne, Color.RED);
+        playerTwo = new Player(controllerTwo, Color.GREEN);
+
         footprints = new ArrayList<>();
-        super.addKeyListener(controller); // Viens de Game
+        super.addKeyListener(controllerOne);
+        super.addKeyListener(controllerTwo);
     }
 
     @Override
@@ -29,12 +43,16 @@ public class MovingRectangleGame extends Game {
 
     @Override
     public void update() {
-        if (controller.isQuitPressed()) {
+        if (controllerOne.isQuitPressed()) {
             super.stop();
         }
-        player.update();
-        if (controller.isMoving()) {
-            footprints.add(player.layFootprint());
+        playerOne.update();
+        playerTwo.update();
+        if (controllerOne.isMoving()) {
+            footprints.add(playerOne.layFootprint());
+        }
+        if (controllerTwo.isMoving()) {
+            footprints.add(playerTwo.layFootprint());
         }
     }
 
@@ -43,6 +61,7 @@ public class MovingRectangleGame extends Game {
         for (Footprint footprint : footprints) {
             footprint.draw(buffer);
         }
-        player.draw(buffer);
+        playerOne.draw(buffer);
+        playerTwo.draw(buffer);
     }
 }

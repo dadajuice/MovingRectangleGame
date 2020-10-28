@@ -8,8 +8,11 @@ import java.awt.*;
 
 public class Player extends ControllableEntity {
 
-    public Player(MovementController controller) {
+    private final Color color;
+
+    public Player(MovementController controller, Color color) {
         super(controller);
+        this.color = color;
         setDimension(30, 30);
         teleport(100, 100);
         setSpeed(4);
@@ -26,6 +29,6 @@ public class Player extends ControllableEntity {
 
     @Override
     public void draw(Buffer buffer) {
-        buffer.drawRectangle(x, y, width, height, Color.red);
+        buffer.drawRectangle(x, y, width, height, color);
     }
 }
